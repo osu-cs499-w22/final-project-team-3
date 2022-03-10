@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from '@emotion/styled/macro';
 import { Box, Typography, Card } from '@mui/material'
+import { Link } from "react-router-dom";
 
 const Form = styled.form`
   display: flex;
@@ -21,6 +22,7 @@ const Input = styled.input`
     color: transparent;
   }
   font-size: 20px;
+  font-family: 'Raleway';
 `;
 
 const Submit = styled.button`
@@ -35,6 +37,7 @@ const Submit = styled.button`
   &:hover {
     background-color: green;
   }
+  font-family: 'Raleway';
 `;
 
 const SubmitDisabled = styled.button`
@@ -44,67 +47,90 @@ const SubmitDisabled = styled.button`
   outline: none;
   border: none;
   border-radius:5px;
+  font-family: 'Raleway';
 `;
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('')
   return (
-      <Card>
+    <Card>
+      <Box
+        sx={{
+          height: "300px",
+          width: "500px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Box
           sx={{
-            height: "300px",
-            width: "500px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Box sx={{ width: "100%", pb: '25px' }}>
-              <Typography sx={{ pl: "10px" }}>Log in with your Spotify credentials:</Typography>
-            </Box>
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log("logged in");
+          <Box sx={{ width: "100%", pb: "25px" }}>
+            <Typography
+              sx={{
+                pl: "10px",
+                fontFamily: "Raleway",
+                fontSize: "24px",
+                fontWeight: "bold",
               }}
             >
-              <Box sx={{ width: "100%" }}>
-                <Typography sx={{ pl: "10px" }}>Username:</Typography>
-              </Box>
-
-              <Input
-                value={username}
-                placeholder="Enter your Spotify Username..."
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <Box sx={{ width: "100%" }}>
-                <Typography sx={{ pl: "10px" }}>Password:</Typography>
-              </Box>
-              <Input
-                value={password}
-                placeholder="Enter your Spotify Password..."
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {username && password && <Submit type="submit">Login</Submit>}
-              {(!username || !password) && (
-                <SubmitDisabled type="submit" disabled={!username || !password}>
-                  Login
-                </SubmitDisabled>
-              )}
-            </Form>
+              Log in with your Spotify credentials:
+            </Typography>
           </Box>
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log("logged in");
+            }}
+          >
+            <Box sx={{ width: "100%" }}>
+              <Typography sx={{ pl: "10px", fontFamily: "Raleway" }}>
+                Username:
+              </Typography>
+            </Box>
+
+            <Input
+              value={username}
+              placeholder="Enter your Spotify Username..."
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Box sx={{ width: "100%" }}>
+              <Typography sx={{ pl: "10px" }}>Password:</Typography>
+            </Box>
+            <Input
+              value={password}
+              placeholder="Enter your Spotify Password..."
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {username && password && (
+              <Link
+                to="/search"
+                style={{
+                  textDecoration: "none",
+                  fontFamily: "Raleway",
+                  color: "black",
+                }}
+              >
+                <Submit type="submit">Login</Submit>
+              </Link>
+            )}
+            {(!username || !password) && (
+              <SubmitDisabled type="submit" disabled={!username || !password}>
+                Login
+              </SubmitDisabled>
+            )}
+          </Form>
         </Box>
-      </Card>
+      </Box>
+    </Card>
   );
 }
 
