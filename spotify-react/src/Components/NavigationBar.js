@@ -116,6 +116,11 @@ function NavigationBar() {
                   text="Followed Artists"
                   to="/followedArtists"
                 />
+                <MenuItem
+                  icon={<LibraryMusicIcon />}
+                  text="Web Playback"
+                  to="/playback"
+                />
               </List>
             </Box>
           </Drawer>
