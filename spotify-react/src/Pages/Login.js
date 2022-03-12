@@ -50,6 +50,20 @@ const SubmitDisabled = styled.button`
   font-family: 'Raleway';
 `;
 
+const SpotifyButton = styled.a`
+  background-color:#44c767;
+  border-radius:28px;
+  border:1px solid #18ab29;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:17px;
+  padding:16px 31px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
+`
+
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('')
@@ -85,7 +99,8 @@ function Login() {
               Log in with your Spotify credentials:
             </Typography>
           </Box>
-          <Form
+          <SpotifyButton href="/auth/login">Login with Spotify</SpotifyButton>
+          {/* <Form
             onSubmit={(e) => {
               e.preventDefault();
               console.log("logged in");
@@ -127,7 +142,7 @@ function Login() {
                 Login
               </SubmitDisabled>
             )}
-          </Form>
+          </Form> */}
         </Box>
       </Box>
     </Card>
