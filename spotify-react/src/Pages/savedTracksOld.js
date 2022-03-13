@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
-import fetchLikedSongs from "../hooks/likedSongs";
+import useLikedSongs from "../hooks/likedSongs";
 
 const headers = [
     {
@@ -11,20 +11,12 @@ const headers = [
         text4: "Album Cover",
     },
 ];
-let songs = [];
-let loading = false;
+
+var listContent = [];
 function SavedTracks(props) {
     const token = props.token;
     const [offset, setOffset] = useState(0);
-    const [listContent, setListContent] = useState([]);
-
-    function useFetchLikedSongs(token, offset) {
-        useEffect(() => {
-            songs = fetchLikedSongs(token, offset);
-        }, [token, offset]);
-        return songs;
-    }
-
+    const [songs, loading] = useLikedSongs(token, offset);
     function handlePrev() {
         if (offset < 50) {
             console.log("cannot decrement further... At list beginning");
@@ -34,22 +26,18 @@ function SavedTracks(props) {
     }
     function handleNext() {
         setOffset(offset + 50);
-        console.log(songs);
     }
-    songs = useFetchLikedSongs(token, offset);
+
     console.log("songs", songs);
-    let temp = [];
-    if (songs && songs.length > 0) {
+    if (songs && songs.length > 0 && listContent.length < 1) {
         songs.map((song) => {
-            temp.push({
+            listContent.push({
                 text1: song.track.name,
                 text2: song.track.artists[0].name,
                 text3: song.track.album.name,
                 text4: song.track.album.images[2].url,
             });
         });
-        console.log("temp", temp);
-        setListContent(temp);
     }
     return (
         <div>
