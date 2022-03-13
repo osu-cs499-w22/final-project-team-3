@@ -38,7 +38,7 @@ function App() {
         <Route path="/trackDetails" element={<Wrapper><TrackDetails /></Wrapper>} />
         <Route path="/artistDetails" element={<Wrapper><ArtistDetails /></Wrapper>} />
         <Route path="/followedArtists" element={<Wrapper><FollowedArtists token={token}/></Wrapper>} />
-        <Route path="/search" element={<Wrapper><Search /></Wrapper>} />
+        <Route path="/search" element={<Wrapper><Search token={token}/></Wrapper>} />
         <Route path="/playback" element={<Wrapper><WebPlayback token={token}/></Wrapper>} />
       </Routes>
     </>
