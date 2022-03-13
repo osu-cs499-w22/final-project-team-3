@@ -6,6 +6,7 @@ function useFollowedArtistsSearch(access_token) {
 
     const controller = new AbortController();
     useEffect(() => {
+        let ignore = false;
         async function fetchSearchResults() {
             let responseBody = {};
             setLoading(true);
@@ -17,13 +18,16 @@ function useFollowedArtistsSearch(access_token) {
                     'Authorization': `Bearer ${access_token}`
             }});
             responseBody = await response.json();
-            console.log(responseBody.artists.items)
-            setLoading(false);
-            setArtists(responseBody.artists.items || []);
+
+            if(!ignore) {
+                setLoading(false);
+                setArtists(responseBody.artists.items || []);
+            }
         }
         fetchSearchResults()
         return () => {
             controller.abort();
+            ignore = true;
         }
     }, [ access_token ]);
 
