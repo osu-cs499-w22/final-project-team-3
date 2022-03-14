@@ -2,7 +2,6 @@ import { Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
 import fetchLikedSongs from "../hooks/likedSongs";
-
 const headers = [
     {
         text1: "Title",
@@ -11,19 +10,31 @@ const headers = [
         text4: "Album Cover",
     },
 ];
+
 let songs = [];
-let loading = false;
 function SavedTracks(props) {
     const token = props.token;
     const [offset, setOffset] = useState(0);
     const [listContent, setListContent] = useState([]);
 
-    function useFetchLikedSongs(token, offset) {
-        useEffect(() => {
-            songs = fetchLikedSongs(token, offset);
-        }, [token, offset]);
-        return songs;
-    }
+    useEffect(() => {
+        fetchLikedSongs(token, offset).then((songs) => {
+            let temp = [];
+            console.log(songs);
+            if (songs && songs.length > 0)
+                // this can be done using properies of map return
+                songs.map((song) => {
+                    console.log(song);
+                    temp.push({
+                        text1: song.track.name,
+                        text2: song.track.artists[0].name,
+                        text3: song.track.album.name,
+                        text4: song.track.album.images[2].url,
+                    });
+                });
+            setListContent(temp);
+        });
+    }, [token, offset]);
 
     function handlePrev() {
         if (offset < 50) {
@@ -34,23 +45,9 @@ function SavedTracks(props) {
     }
     function handleNext() {
         setOffset(offset + 50);
-        console.log(songs);
     }
-    songs = useFetchLikedSongs(token, offset);
-    console.log("songs", songs);
-    let temp = [];
-    if (songs && songs.length > 0) {
-        songs.map((song) => {
-            temp.push({
-                text1: song.track.name,
-                text2: song.track.artists[0].name,
-                text3: song.track.album.name,
-                text4: song.track.album.images[2].url,
-            });
-        });
-        console.log("temp", temp);
-        setListContent(temp);
-    }
+    // songs = useFetchLikedSongs(token, offset);
+    console.log("listContent", listContent);
     return (
         <div>
             <CustomList

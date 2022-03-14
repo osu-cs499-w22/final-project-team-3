@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 async function fetchLikedSongs(token, offset) {
     var limit = 50;
-    const controller = new AbortController();
     let responseBody = {};
     try {
         console.log(
@@ -21,7 +19,6 @@ async function fetchLikedSongs(token, offset) {
         );
         responseBody = await response.json();
         console.log("responsebody: ", responseBody);
-        // console.log(responseBody.items);
     } catch (e) {
         if (e instanceof DOMException) {
             console.log("== HTTP request cancelled");
