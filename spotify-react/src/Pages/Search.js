@@ -96,8 +96,8 @@ function Search(props) {
               temp.push({
                 text1: result.name,
                 text2: numeral(result.followers.total).format('0,0'),
-                text3: titleCase(result.genres[0]),
-                text4: (result.images.length > 0) ? result.images[2].url : ''
+                text3: (result.genres.length > 0) ? titleCase(result.genres[0]) : '',
+                text4: (result.images.length > 2) ? result.images[2].url : ''
               })
             })
           }
@@ -156,8 +156,8 @@ function Search(props) {
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                setParamSong(song);
                 setListContent([]);
+                setParamSong(song);
                 setOffset(0);
                 console.log("song searched");
               }}
@@ -192,6 +192,7 @@ function Search(props) {
                     }}
                     onClick={(e) => {
                       setSongFilter(true);
+                      setAlbumFilter(false);
                       console.log(songFilter);
                       e.preventDefault();
                       setType("track");
@@ -231,6 +232,7 @@ function Search(props) {
                     }}
                     onClick={(e) => {
                       setAlbumFilter(true);
+                      setSongFilter(false);
                       e.preventDefault();
                       setType("artist");
                       setHeaders(artistHeaders);
