@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CustomList from "../Components/CustomList";
-import useFollowedArtistsSearch from "../hooks/followedArtists"
+import fetchFollowedArtists from "../hooks/followedArtists"
 
 const headers = [
   {
@@ -11,30 +11,52 @@ const headers = [
   },
 ];
 
-var listContent = []
+let artists = []
+function FollowedArtists(props) {
 
-function FollowedArtists({ token }) {
+    const token = props.token
+    const [ offset, setOffset ] = useState(0);
+    const [ listContent, setListContent ] = useState([])
 
-    const [ artistList, loading ] = useFollowedArtistsSearch(token)
+    useEffect(() => {
+        fetchFollowedArtists(token, offset).then((artists) => {
+            let temp = [];
+            console.log(artists);
+            if(artists && artists.length > 0)
+                artists.map((artist) => {
+                    console.log(artist);
+                    temp.push({
+                        text1: artist.name,
+                        text2: artist.followers.total,
+                        text3: artist.genres[0],
+                        text4: artist.images[2].url
+                    });
+                });
+            setListContent(temp);
+            console.log(listContent)
+        })
+    }, [token, offset]);
 
-    console.log("loading again")
-
-    if (artistList && artistList.length > 0 && (listContent.length == 0 || listContent[0].text1 !== artistList[0].name)) {
-        artistList.map(artist =>
-            listContent.push({
-                text1: artist.name,
-                text2: artist.followers.total,
-                text3: artist.genres[0],
-                text4: artist.images[2].url
-            },)
-            // && console.log("Pushing", artist.name),
-        )
+    function handlePrev() {
+        if (offset < 50) {
+            console.log("cannot decrement further... At list beginning");
+        } else {
+            setOffset(offset - 50);
+        }
     }
 
-    console.log(listContent)
+    function handleNext() {
+        setOffset(offset + 50);
+    }
 
-    return ( loading ? <div /> :
-        <CustomList title={"Followed Artists"} listContent={listContent} headers={headers} />
+    console.log("listContent", listContent);
+
+    return (
+        <div>
+            <CustomList title={"Followed Artists"} listContent={listContent} headers={headers} />
+            <button onClick={handlePrev}>prev</button>
+            <button onClick={handleNext}>next</button>
+        </div>
     )
 }
 

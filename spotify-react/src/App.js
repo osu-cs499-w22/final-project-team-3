@@ -13,10 +13,18 @@ import "./App.css";
 import Wrapper from "./Components/Wrapper";
 
 function App() {
+    const [token, setToken] = useState("");
 
-  const [token, setToken] = useState('');
+    useEffect(() => {
+        async function getToken() {
+            const response = await fetch("/auth/token");
+            const json = await response.json();
+            console.log(json.access_token);
+            setToken(json.access_token);
+        }
 
-  useEffect(() => {
+        getToken();
+    }, []);
 
     async function getToken() {
       const response = await fetch('/auth/token');
@@ -33,7 +41,7 @@ function App() {
       <Routes>
         <Route path="/" element={(token === '') ? <Wrapper><Login /></Wrapper> : <Wrapper><Home/></Wrapper>} />
         <Route path="/playlists" element={<Wrapper><Playlists /></Wrapper>} />
-        <Route path="/savedTracks" element={<Wrapper><SavedTracks /></Wrapper>} />
+        <Route path="/savedTracks" element={<Wrapper><SavedTracks token={token}/></Wrapper>} />
         <Route path="/login" element={<Wrapper><Login /></Wrapper>} />
         <Route path="/trackDetails" element={<Wrapper><TrackDetails /></Wrapper>} />
         <Route path="/artistDetails" element={<Wrapper><ArtistDetails /></Wrapper>} />
