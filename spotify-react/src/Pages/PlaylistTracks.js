@@ -3,39 +3,46 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
-import fetchPlayists from "../hooks/userPlaylists";
-import { Outlet } from "react-router-dom";
-
+import fetchPlaylist from "../hooks/getPlaylist";
+import { useParams } from "react-router";
 const headers = [
     {
         text1: "Title",
-        text2: "Song Count",
-        text3: "Creator",
-        text4: "Playlist Cover",
+        text2: "Artist",
+        text3: "Album",
+        text4: "Album Cover",
     },
 ];
 
-function Playlists(props) {
-    let token = props.token;
+let songs = [];
+function PlaylistTracks(props) {
+    const params = useParams()
+    const token = props.token;
     const [offset, setOffset] = useState(0);
     const [listContent, setListContent] = useState([]);
+    const [playlistName, setPlaylistName] = useState('');
+
     useEffect(() => {
-        fetchPlayists(token, offset).then((playlists) => {
-            let temp = [];
-            if (playlists && playlists.length > 0)
-                // this can be done using properies of map return
-                playlists.map((playlist) => {
-                    temp.push({
-                        type: 'playlists',
-                        id: playlist.id,
-                        text1: playlist.name,
-                        text2: playlist.tracks.total,
-                        text3: playlist.owner.display_name,
-                        text4: (playlist.images.length > 0) ? playlist.images[0].url : '',
-                    });
-                });
-            setListContent(temp);
-        });
+      fetchPlaylist(token, params.playlist, offset).then((playlist) => {
+        let temp = [];
+        console.log("playlist:", playlist);
+        if (playlist && playlist.tracks && playlist.tracks.length > 0)
+          console.log("tracks exists")
+          // this can be done using properies of map return
+          playlist.tracks.items.map((song) => {
+              console.log(song);
+              temp.push({
+                  id: song.track.id,
+                  type: 'trackDetails',
+                  text1: song.track.name,
+                  text2: song.track.artists[0].name,
+                  text3: song.track.album.name,
+                  text4: song.track.album.images[2].url,
+              });
+          });
+        setListContent(temp);
+        setPlaylistName(playlist.name)
+      });
     }, [token, offset]);
 
     function handlePrev() {
@@ -48,6 +55,8 @@ function Playlists(props) {
     function handleNext() {
         setOffset(offset + 50);
     }
+    // songs = useFetchLikedSongs(token, offset);
+    console.log("listContent", listContent);
     return (
       <Box
         sx={{
@@ -61,7 +70,7 @@ function Playlists(props) {
       >
         <Box sx={{ height: "90%" }}>
           <CustomList
-            title={"Playlists"}
+            title={playlistName}
             listContent={listContent}
             headers={headers}
           />
@@ -100,4 +109,4 @@ function Playlists(props) {
     );
 }
 
-export default Playlists;
+export default PlaylistTracks;

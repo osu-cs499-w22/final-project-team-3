@@ -11,6 +11,7 @@ import Search from "./Pages/Search";
 import WebPlayback from "./Pages/WebPlayback";
 import "./App.css";
 import Wrapper from "./Components/Wrapper";
+import PlaylistTracks from "./Pages/PlaylistTracks";
 
 function App() {
     const [token, setToken] = useState("");
@@ -38,6 +39,9 @@ function App() {
         </Route>
         <Route path="/artistDetails" element={<Wrapper><ArtistDetails token={token}/></Wrapper>} >
           <Route path=":artist" element={<Wrapper><ArtistDetails token={token}></ArtistDetails></Wrapper>} />
+        </Route>
+        <Route path="/playlists" element={<Wrapper><PlaylistTracks token={token} /></Wrapper>} >
+          <Route path=":playlist" element={<Wrapper><PlaylistTracks token={token} /></Wrapper>} />
         </Route>
         <Route path="/followedArtists" element={<Wrapper><FollowedArtists token={token}/></Wrapper>} />
         <Route path="/search" element={<Wrapper><Search token={token}/></Wrapper>} />
