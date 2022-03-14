@@ -34,7 +34,7 @@ function App() {
         <Route path="/savedTracks" element={<Wrapper><SavedTracks token={token}/></Wrapper>} />
         <Route path="/login" element={<Wrapper><Login /></Wrapper>} />
         <Route path="/trackDetails" element={<Wrapper><TrackDetails token={token}/></Wrapper>} />
-        <Route path="/artistDetails" element={<Wrapper><ArtistDetails /></Wrapper>} />
+        <Route path="/artistDetails" element={<Wrapper><ArtistDetails token={token}/></Wrapper>} />
         <Route path="/followedArtists" element={<Wrapper><FollowedArtists token={token}/></Wrapper>} />
         <Route path="/search" element={<Wrapper><Search token={token}/></Wrapper>} />
         <Route path="/playback" element={<Wrapper><WebPlayback token={token}/></Wrapper>} />
