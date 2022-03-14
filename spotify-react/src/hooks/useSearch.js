@@ -1,43 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
-function useSearch(access_token, query, type) {
-    const [ results, setResults ] = useState([]);
-    const [ loading, setLoading ] = useState(false);
-
-    useEffect(() => {
-        let ignore = false;
-        const controller = new AbortController();
-        async function fetchSearchResults() {
-            let responseBody = {};
-            setLoading(true);
-            const response = await fetch(
-                `https://api.spotify.com/v1/search?q=${query}&type=${type}`, {
-                method: 'GET',
+async function fetchSearchResults(token, query, type, offset) {
+    var limit = 50;
+    let responseBody = {}
+    try {
+        console.log(
+            "fetching",
+            `https://api.spotify.com/v1/search?q=${query}&type=${type}&limit=${limit}&offset=${offset}`
+        );
+        const response = await fetch(
+            `https://api.spotify.com/v1/search?q=${query}&type=${type}&limit=${limit}&offset=${offset}`,
+            {
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${access_token}`
-            }});
-            responseBody = await response.json();
-
-            console.log(responseBody)
-
-            if(!ignore) {
-                setLoading(false);
-                if(type === 'track') {
-                    setResults(responseBody.tracks.items || []);
-                } else {
-                    setResults(responseBody.artists.items || [])
-                }
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
             }
+        );
+        responseBody = await response.json();
+        console.log("responsebody: ", responseBody);
+    } catch (e) {
+        if (e instanceof DOMException) {
+            console.log("== HTTP request cancelled");
+        } else {
+            throw e;
         }
-        fetchSearchResults()
-        return () => {
-            controller.abort();
-            ignore = true;
-        }
-    }, [ access_token, query ]);
-
-    return [results, loading];
+    }
+    return (type === 'track') ? responseBody.tracks.items : responseBody.artists.items
 }
 
-export default useSearch
+export default fetchSearchResults;
