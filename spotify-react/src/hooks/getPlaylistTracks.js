@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-async function fetchPlaylist(token, id) {
+async function fetchPlaylistTracks(token, id, offset) {
     let responseBody = {};
     try {
+        // asdlgkas
         console.log(
             "fetching",
-            `https://api.spotify.com/v1/playlists/${id}`
+            `https://api.spotify.com/v1/playlists/${id}/tracks?offset=${offset}&limit=100`
         );
         const response = await fetch(
-            `https://api.spotify.com/v1/playlists/${id}`,
+            `https://api.spotify.com/v1/playlists/${id}/tracks?offset=${offset}&limit=100`,
             {
                 method: "GET",
                 headers: {
@@ -17,7 +18,7 @@ async function fetchPlaylist(token, id) {
             }
         );
         responseBody = await response.json();
-        console.log("responsebody: ", responseBody);
+        console.log("tracks responsebody: ", responseBody);
     } catch (e) {
         if (e instanceof DOMException) {
             console.log("== HTTP request cancelled");
@@ -25,7 +26,7 @@ async function fetchPlaylist(token, id) {
             throw e;
         }
     }
-    return responseBody;
+    return responseBody.items;
 }
 
-export default fetchPlaylist;
+export default fetchPlaylistTracks;

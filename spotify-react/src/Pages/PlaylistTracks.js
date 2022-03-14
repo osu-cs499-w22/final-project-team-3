@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
 import fetchPlaylist from "../hooks/getPlaylist";
 import { useParams } from "react-router";
+import fetchPlaylistTracks from "../hooks/getPlaylistTracks";
 const headers = [
     {
         text1: "Title",
@@ -23,23 +24,23 @@ function PlaylistTracks(props) {
     const [playlistName, setPlaylistName] = useState('');
 
     useEffect(() => {
-      fetchPlaylist(token, params.playlist, offset).then((playlist) => {
+      fetchPlaylist(token, params.playlist).then((playlist) => {
         let temp = [];
         console.log("playlist:", playlist);
-        if (playlist && playlist.tracks && playlist.tracks.length > 0)
-          console.log("tracks exists")
-          // this can be done using properies of map return
-          playlist.tracks.items.map((song) => {
-              console.log(song);
+        if (playlist && playlist.tracks) {
+          fetchPlaylistTracks(token, params.playlist, offset).then((tracks) => {
+            tracks.map((song) => {
               temp.push({
-                  id: song.track.id,
-                  type: 'trackDetails',
-                  text1: song.track.name,
-                  text2: song.track.artists[0].name,
-                  text3: song.track.album.name,
-                  text4: song.track.album.images[2].url,
+                id: song.track.id,
+                type: 'trackDetails',
+                text1: song.track.name,
+                text2: song.track.artists[0].name,
+                text3: song.track.album.name,
+                text4: song.track.album.images[2].url,
               });
-          });
+            })
+          })
+        }
         setListContent(temp);
         setPlaylistName(playlist.name)
       });
@@ -55,7 +56,7 @@ function PlaylistTracks(props) {
     function handleNext() {
         setOffset(offset + 50);
     }
-    // songs = useFetchLikedSongs(token, offset);
+    
     console.log("listContent", listContent);
     return (
       <Box
