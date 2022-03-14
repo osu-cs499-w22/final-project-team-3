@@ -68,11 +68,10 @@ function Search(props) {
           console.log("adding")
           if (type == 'track') {
             results.map((result) => {
-              // console.log("result: ", result)
               temp.push({
                 text1: result.name,
                 text2: result.artists[0].name,
-                text3: "",
+                text3: "Save Song",
                 text4: result.album.images[2].url
               })
             })
@@ -80,23 +79,12 @@ function Search(props) {
             let i, j = 0
             console.log("adding artist")
             results.map((result) => {
-              // console.log("result: ", result)
-              // console.log(i++)
-              if (result.images.length > 1) {
-                temp.push({
-                  text1: result.name,
-                  text2: result.followers.total,
-                  text3: result.genres[0],
-                  text4: result.images[2].url
-                })
-              } else {
-                temp.push({
-                  text1: result.name,
-                  text2: result.followers.total,
-                  text3: result.genres[0],
-                  text4: ''
-                })
-              }
+              temp.push({
+                text1: result.name,
+                text2: result.followers.total,
+                text3: result.genres[0],
+                text4: (result.images.length > 0) ? result.images[2].url : ''
+              })
             })
           }
         }
