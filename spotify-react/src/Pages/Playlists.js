@@ -28,7 +28,7 @@ function Playlists(props) {
                         text1: playlist.name,
                         text2: playlist.tracks.total,
                         text3: playlist.owner.display_name,
-                        text4: playlist.images[0].url,
+                        text4: (playlist.images.length > 0) ? playlist.images[0].url : '',
                     });
                 });
             setListContent(temp);
