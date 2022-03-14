@@ -68,7 +68,7 @@ function Search(props) {
     const [headers, setHeaders] = useState(songHeaders)
     const [offset, setOffset] = useState(0)
     const [listContent, setListContent] = useState([])
-    const [songFilter, setSongFilter] = useState(false);
+    const [songFilter, setSongFilter] = useState(true);
     const [albumFilter, setAlbumFilter] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -83,6 +83,8 @@ function Search(props) {
           if (type === 'track') {
             results.map((result) => {
               temp.push({
+                id: result.id,
+                type: 'trackDetails',
                 text1: result.name,
                 text2: result.artists[0].name,
                 text3: "Save Song",
@@ -94,6 +96,8 @@ function Search(props) {
             console.log("adding artist")
             results.map((result) => {
               temp.push({
+                id: result.id,
+                type: 'artistDetails',
                 text1: result.name,
                 text2: numeral(result.followers.total).format('0,0'),
                 text3: (result.genres.length > 0) ? titleCase(result.genres[0]) : '',
@@ -271,7 +275,7 @@ function Search(props) {
                   }}
                   onClick={(e) => {
                     setAlbumFilter(false);
-                    setSongFilter(false);
+                    setSongFilter(true);
                     e.preventDefault();
                     setSong("");
                     setParamSong("");

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton, Typography, Avatar, Divider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import getArtistDetails from "../hooks/getArtistDetails";
 function ArtistDetails(props) {
+    const params = useParams();
+    console.log("params:", params)
     const token = props.token
     const [ artistContent, setArtistContent ] = useState({
         name: 'test',
@@ -14,7 +16,7 @@ function ArtistDetails(props) {
 
     useEffect(() => {
         console.log("artistContent: ", artistContent)
-        getArtistDetails(token, "3TVXtAsR1Inumwj472S9r4").then((details) => {
+        getArtistDetails(token, params.artist).then((details) => {
             setArtistContent({
                 name: details.name,
                 external_url: details.external_urls.spotify,

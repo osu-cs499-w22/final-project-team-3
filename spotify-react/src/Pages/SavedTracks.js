@@ -28,6 +28,8 @@ function SavedTracks(props) {
                 songs.map((song) => {
                     console.log(song);
                     temp.push({
+                        id: song.track.id,
+                        type: 'trackDetails',
                         text1: song.track.name,
                         text2: song.track.artists[0].name,
                         text3: song.track.album.name,

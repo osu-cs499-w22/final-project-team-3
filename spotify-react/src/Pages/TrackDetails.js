@@ -7,18 +7,35 @@ import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import PauseCircleFilledRoundedIcon from '@mui/icons-material/PauseCircleFilledRounded';
 import addRemoveSong from "../hooks/addRemoveSong";
 import checkSavedTracks from "../hooks/checkSavedTracks";
+import getTrackDetails from "../hooks/getTrackDetails";
+import { Link, useParams } from "react-router-dom";
 
 function TrackDetails(props) {
+    const params = useParams()
     const token = props.token
     const [favorite, setFavorite] = useState(false);
     const [playing, setPlaying] = useState(false);
-    const [saved, setSaved] = useState(false)
+    const [saved, setSaved] = useState(false);
+    const [ trackContent, setTrackContent ] = useState({
+      name: 'Track1',
+      artistName: 'Test',
+      artistId: 'aispodgjasd',
+      image: '1',
+    })
 
     useEffect(() => {
-      checkSavedTracks(token, '1DMEzmAoQIikcL52psptQL').then((saved) => {
-        setSaved(saved)
+      checkSavedTracks(token, params.track).then((saved) => {
+        setFavorite(saved)
       })
-    })
+      getTrackDetails(token, params.track).then((details) => {
+        setTrackContent({
+          name: details.name,
+          artistName: details.artists[0].name,
+          artistId: details.artists[0].id,
+          image: details.album.images[0].url
+        });
+      })
+    }, [token])
 
     return (
       <Box
@@ -77,7 +94,12 @@ function TrackDetails(props) {
                 justifyContent: "center",
               }}
             >
-              <Typography>Album Art </Typography>
+              <img
+                height="100%"
+                width="100%"
+                src={trackContent.image}
+                alt="Album Art"
+              />
             </Card>
           </Box>
           <Box
@@ -92,13 +114,14 @@ function TrackDetails(props) {
           >
             <Box />
             <Typography sx={{ color: "white", fontSize: "30px", pr: "10px" }}>
-              Song Title
+              {trackContent.name}
             </Typography>
             {favorite && (
               <FavoriteIcon
                 sx={{ color: "white" }}
                 fontSize="large"
                 onClick={() => {
+                  addRemoveSong(token, params.track, 'DELETE')
                   setFavorite(false);
                 }}
               />
@@ -108,6 +131,7 @@ function TrackDetails(props) {
                 sx={{ color: "white" }}
                 fontSize="large"
                 onClick={() => {
+                  addRemoveSong(token, params.track, 'PUT')
                   setFavorite(true);
                 }}
               />
@@ -124,7 +148,9 @@ function TrackDetails(props) {
             }}
           >
             <Typography sx={{ color: "white", fontSize: "20px", pr: "10px" }}>
-              Artists name
+              <Link to={`/artistDetails/${trackContent.artistId}`} >
+                {trackContent.artistName}
+              </Link>
             </Typography>
           </Box>
           <Box
@@ -153,7 +179,7 @@ function TrackDetails(props) {
             </IconButton>
           </Box>
 
-          <button onClick={() => {
+          {/* <button onClick={() => {
             addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'PUT')
             setSaved(true)
             }}>Add</button>
@@ -161,7 +187,7 @@ function TrackDetails(props) {
             addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'DELETE')
             setSaved(false)
             }}>Remove</button>
-          <button>{saved ? "Saved" : "Not Saved"}</button>
+          <button>{saved ? "Saved" : "Not Saved"}</button> */}
         </Box>
       </Box>
     );

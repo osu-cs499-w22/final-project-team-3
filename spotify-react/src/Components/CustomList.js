@@ -1,4 +1,5 @@
 import { Box, Typography, Divider } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const CustomList = ({ title, listContent, headers }) => {
   return (
@@ -108,9 +109,9 @@ const CustomList = ({ title, listContent, headers }) => {
                       fontFamily: "Raleway",
                       fontWeight: "bold",
                     }}
-                  >
+                  ><Link to={`/${item.type}/${item.id}`}>
                     {item.text1}
-                  </Typography>
+                  </Link></Typography>
                 </Box>
                 <Box
                   sx={{

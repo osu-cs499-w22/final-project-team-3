@@ -38,6 +38,8 @@ function FollowedArtists(props) {
                 artists.map((artist) => {
                     console.log(artist);
                     temp.push({
+                        id: artist.id,
+                        type: 'artistDetails',
                         text1: artist.name,
                         // text2: numeral(artist.followers.total).format('0,0'),
                         // text3: titleCase(artist.genres[0]),
