@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton, Typography, Avatar, Divider } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import numeral from "numeral";
 import getArtistDetails from "../hooks/getArtistDetails";
+
+function titleCase(str) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+  }
+  return str.join(' ');
+}
+
 function ArtistDetails(props) {
     const params = useParams();
     console.log("params:", params)
@@ -13,6 +23,7 @@ function ArtistDetails(props) {
         genres: ["test", "test2", "test3"],
         image: '1'
     })
+
 
     useEffect(() => {
         console.log("artistContent: ", artistContent)
@@ -78,7 +89,7 @@ function ArtistDetails(props) {
               }}
             >
               {" "}
-              {artistContent.followers} Followers
+              {numeral(artistContent.followers).format('0,0')} Followers
             </Typography>
           </Box>
         </Box>
@@ -147,7 +158,7 @@ function ArtistDetails(props) {
                         color: "white",
                         }}
                     >
-                        {genre}
+                        {titleCase(genre)}
                     </Typography>
                 </Box>    
             )}

@@ -115,7 +115,16 @@ const CustomList = ({ customIcon, title, listContent, headers }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    <Link to={`/${item.type}/${item.id}`}>{item.text1}</Link>
+                    <Link
+                      to={`/${item.type}/${item.id}`}
+                      style={{
+                        textDecorationColor: "white",
+                        fontFamily: "Raleway",
+                        color: "white",
+                      }}
+                    >
+                      {item.text1}
+                    </Link>
                   </Typography>
                 </Box>
                 <Box

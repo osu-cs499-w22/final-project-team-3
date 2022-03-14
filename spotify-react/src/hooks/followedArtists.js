@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 async function fetchFollowedArtists(access_token, offset) {
     var limit = 50;
+    console.log("offset: " + offset)
     let responseBody = {};
     try {
         console.log(
