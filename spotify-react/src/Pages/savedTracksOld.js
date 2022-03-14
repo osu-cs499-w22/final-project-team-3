@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
-import fetchLikedSongs from "../hooks/likedSongs";
+import useLikedSongs from "../hooks/likedSongs";
+
 const headers = [
     {
         text1: "Title",
@@ -11,31 +12,11 @@ const headers = [
     },
 ];
 
-let songs = [];
+var listContent = [];
 function SavedTracks(props) {
     const token = props.token;
     const [offset, setOffset] = useState(0);
-    const [listContent, setListContent] = useState([]);
-
-    useEffect(() => {
-        fetchLikedSongs(token, offset).then((songs) => {
-            let temp = [];
-            console.log(songs);
-            if (songs && songs.length > 0)
-                // this can be done using properies of map return
-                songs.map((song) => {
-                    console.log(song);
-                    temp.push({
-                        text1: song.track.name,
-                        text2: song.track.artists[0].name,
-                        text3: song.track.album.name,
-                        text4: song.track.album.images[2].url,
-                    });
-                });
-            setListContent(temp);
-        });
-    }, [token, offset]);
-
+    const [songs, loading] = useLikedSongs(token, offset);
     function handlePrev() {
         if (offset < 50) {
             console.log("cannot decrement further... At list beginning");
@@ -46,8 +27,18 @@ function SavedTracks(props) {
     function handleNext() {
         setOffset(offset + 50);
     }
-    // songs = useFetchLikedSongs(token, offset);
-    console.log("listContent", listContent);
+
+    console.log("songs", songs);
+    if (songs && songs.length > 0 && listContent.length < 1) {
+        songs.map((song) => {
+            listContent.push({
+                text1: song.track.name,
+                text2: song.track.artists[0].name,
+                text3: song.track.album.name,
+                text4: song.track.album.images[2].url,
+            });
+        });
+    }
     return (
         <div>
             <CustomList
