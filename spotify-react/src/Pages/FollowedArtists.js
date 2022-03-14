@@ -53,10 +53,8 @@ function FollowedArtists(props) {
     useEffect(() => {
         fetchFollowedArtists(token, offset).then((artists) => {
             let temp = [];
-            console.log(artists);
             if(artists && artists.length > 0)
                 artists.map((artist) => {
-                    console.log(artist);
                     temp.push({
                         id: artist.id,
                         type: 'artistDetails',
@@ -67,9 +65,8 @@ function FollowedArtists(props) {
                     });
                 });
             setListContent(temp);
-            console.log(listContent)
         })
-    }, [token, offset, listContent]);
+    }, [token, offset]);
 
     function handlePrev() {
         if (offset < 50) {
