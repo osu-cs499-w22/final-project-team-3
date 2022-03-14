@@ -20,16 +20,17 @@ function SavedTracks(props) {
     useEffect(() => {
         fetchLikedSongs(token, offset).then((songs) => {
             let temp = [];
-            console.log(songs);
+            // console.log(songs);
             if (songs && songs.length > 0)
                 // this can be done using properies of map return
                 songs.map((song) => {
-                    console.log(song);
+                    // console.log(song);
                     temp.push({
                         text1: song.track.name,
                         text2: song.track.artists[0].name,
                         text3: song.track.album.name,
                         text4: song.track.album.images[2].url,
+                        text5: "test",
                     });
                 });
             setListContent(temp);
