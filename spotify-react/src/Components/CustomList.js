@@ -1,7 +1,9 @@
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, IconButton } from "@mui/material";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link } from "react-router-dom";
 
-const CustomList = ({ title, listContent, headers }) => {
+const CustomList = ({ customIcon, title, listContent, headers }) => {
   return (
     <>
       <Box
@@ -31,7 +33,7 @@ const CustomList = ({ title, listContent, headers }) => {
         >
           {headers.map((header) => (
             <>
-              <Box sx={{ minWidth: "350px"}}>
+              <Box sx={{ minWidth: "350px" }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -55,7 +57,7 @@ const CustomList = ({ title, listContent, headers }) => {
                   {header.text2}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: "250px", ml: '10px' }}>
+              <Box sx={{ minWidth: "250px", ml: "10px" }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -67,7 +69,7 @@ const CustomList = ({ title, listContent, headers }) => {
                   {header.text3}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: "150px", ml: '10px' }}>
+              <Box sx={{ minWidth: "150px", ml: "10px" }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -83,7 +85,10 @@ const CustomList = ({ title, listContent, headers }) => {
           ))}
         </Box>
         <Divider sx={{ color: "white", mb: "30px", fontWeight: "bold" }} />
-        <Box sx={{ width: "1100px", height: "100%", overflowY: "auto" }}>
+        <Box
+          id="customList"
+          sx={{ width: "1100px", height: "100%", overflowY: "auto" }}
+        >
           {listContent.map((item) => (
             <>
               <Box
@@ -109,9 +114,9 @@ const CustomList = ({ title, listContent, headers }) => {
                       fontFamily: "Raleway",
                       fontWeight: "bold",
                     }}
-                  ><Link to={`/${item.type}/${item.id}`}>
-                    {item.text1}
-                  </Link></Typography>
+                  >
+                    <Link to={`/${item.type}/${item.id}`}>{item.text1}</Link>
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
@@ -146,16 +151,26 @@ const CustomList = ({ title, listContent, headers }) => {
                     ml: "10px",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "18px",
-                      color: "white",
-                      fontFamily: "Raleway",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {item.text3}
-                  </Typography>
+                  {customIcon ? (
+                    <FavoriteIcon
+                      sx={{ color: "white" }}
+                      fontSize="large"
+                      onClick={() => {
+                        console.log(item);
+                      }}
+                    />
+                  ) : (
+                    <Typography
+                      sx={{
+                        fontSize: "18px",
+                        color: "white",
+                        fontFamily: "Raleway",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {item.text3}
+                    </Typography>
+                  )}
                 </Box>
                 <Box
                   sx={{

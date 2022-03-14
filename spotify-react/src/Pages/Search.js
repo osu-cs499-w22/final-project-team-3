@@ -295,6 +295,7 @@ function Search(props) {
           {listContent?.length > 0 && loading === false && (
             <>
               <CustomList
+                customIcon={type === 'track'}
                 title={"Search Results"}
                 listContent={listContent}
                 headers={headers}
