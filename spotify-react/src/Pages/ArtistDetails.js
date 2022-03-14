@@ -4,21 +4,32 @@ import { Link } from "react-router-dom";
 import getArtistDetails from "../hooks/getArtistDetails";
 function ArtistDetails(props) {
     const token = props.token
-    const [ artistContent, setArtistContent ] = useState({})
+    const [ artistContent, setArtistContent ] = useState({
+        name: 'test',
+        external_url: 'test.com',
+        followers: '5',
+        genres: ["test", "test2", "test3"],
+        image: '1'
+    })
 
     useEffect(() => {
-        getArtistDetails(token, "26VFTg2z8YR0cCuwLzESi2").then((details) => {
+        console.log("artistContent: ", artistContent)
+        getArtistDetails(token, "3TVXtAsR1Inumwj472S9r4").then((details) => {
             setArtistContent({
                 name: details.name,
                 external_url: details.external_urls.spotify,
-                followers: details.followers,
+                followers: details.followers.total,
                 genres: details.genres,
                 image: details.images[0].url,
             })
         })
     }, [token])
     
-    console.log("ArtistDetails: ", artistContent)
+    console.log("artistContent: ", artistContent)
+    artistContent.genres.map((genre) => {
+        console.log(genre)
+    })
+
     return (
       <Box
         sx={{
@@ -42,7 +53,7 @@ function ArtistDetails(props) {
         >
           <Avatar
             sx={{ mr: "15px", height: "200px", width: "200px" }}
-            src="https://thisis-images.scdn.co/37i9dQZF1DZ06evO3nMr04-large.jpg"
+            src={artistContent.image}
             alt="pic"
           />
           <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -54,7 +65,7 @@ function ArtistDetails(props) {
                 color: "white",
               }}
             >
-              Kanye West
+              {artistContent.name}
             </Typography>
             <Typography
               sx={{
@@ -65,7 +76,7 @@ function ArtistDetails(props) {
               }}
             >
               {" "}
-              1,000,000 followers
+              {artistContent.followers} Followers
             </Typography>
           </Box>
         </Box>
@@ -89,7 +100,7 @@ function ArtistDetails(props) {
           >
             Links:{" "}
           </Typography>
-          <a style={{textDecorationColor: 'white'}} href="https://shop.kanyewest.com/">
+          <a style={{textDecorationColor: 'white'}} href={artistContent.external_url} target="_blank">
             {" "}
             <Typography
               sx={{
@@ -99,7 +110,7 @@ function ArtistDetails(props) {
                 color: "white",
               }}
             >
-              shop.kanyewest.com
+              {artistContent.external_url}
             </Typography>
           </a>
         </Box>
@@ -124,30 +135,20 @@ function ArtistDetails(props) {
             Genres:
           </Typography>
           <Divider sx={{ width: "100%", color: "white" }} />
-          <Box>
-            <Typography
-              sx={{
-                fontFamily: "Raleway",
-                fontSize: "20px",
-                fontWeight: "bold",
-                color: "white",
-              }}
-            >
-              Genre 1
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              sx={{
-                fontFamily: "Raleway",
-                fontSize: "20px",
-                fontWeight: "bold",
-                color: "white",
-              }}
-            >
-              Genre 2
-            </Typography>
-          </Box>
+            {artistContent.genres.map(genre =>
+                <Box>
+                    <Typography
+                        sx={{
+                        fontFamily: "Raleway",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        color: "white",
+                        }}
+                    >
+                        {genre}
+                    </Typography>
+                </Box>    
+            )}
         </Box>
       </Box>
     );
