@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Box, Typography, Card, IconButton } from '@mui/material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import PauseCircleFilledRoundedIcon from '@mui/icons-material/PauseCircleFilledRounded';
+import addRemoveSong from "../hooks/addRemoveSong";
+import checkSavedTracks from "../hooks/checkSavedTracks";
 
-function TrackDetails() {
+function TrackDetails(props) {
+    const token = props.token
     const [favorite, setFavorite] = useState(false);
     const [playing, setPlaying] = useState(false);
+    const [saved, setSaved] = useState(false)
+
+    useEffect(() => {
+      checkSavedTracks(token, '1DMEzmAoQIikcL52psptQL').then((saved) => {
+        setSaved(saved)
+      })
+    })
 
     return (
       <Box
@@ -142,6 +152,16 @@ function TrackDetails() {
               )}
             </IconButton>
           </Box>
+
+          <button onClick={() => {
+            addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'PUT')
+            setSaved(true)
+            }}>Add</button>
+          <button onClick={() => {
+            addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'DELETE')
+            setSaved(false)
+            }}>Remove</button>
+          <button>{saved ? "Saved" : "Not Saved"}</button>
         </Box>
       </Box>
     );
