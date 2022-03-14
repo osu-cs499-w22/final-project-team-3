@@ -1,4 +1,6 @@
-import { Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import React, { useState, useEffect } from "react";
 import CustomList from "../Components/CustomList";
 import fetchLikedSongs from "../hooks/likedSongs";
@@ -49,15 +51,54 @@ function SavedTracks(props) {
     // songs = useFetchLikedSongs(token, offset);
     console.log("listContent", listContent);
     return (
-        <div>
-            <CustomList
-                title={"Liked Songs"}
-                listContent={listContent}
-                headers={headers}
-            />
-            <button onClick={handlePrev}>prev</button>
-            <button onClick={handleNext}>next</button>
-        </div>
+      <Box
+        sx={{
+          height: "92vh",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box sx={{ height: "90%" }}>
+          <CustomList
+            title={"Liked Songs"}
+            listContent={listContent}
+            headers={headers}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              mt: "10px",
+            }}
+          >
+            <IconButton
+              onClick={handlePrev}
+              sx={{
+                backgroundColor: "white",
+                "&:hover": { backgroundColor: "#565656" },
+                borderRadius: "5px",
+              }}
+            >
+              {" "}
+              <NavigateBeforeIcon sx={{ color: "black" }} />
+            </IconButton>
+            <IconButton
+              onClick={handleNext}
+              sx={{
+                backgroundColor: "white",
+                "&:hover": { backgroundColor: "#565656" },
+                borderRadius: "5px",
+              }}
+            >
+              <NavigateNextIcon sx={{ color: "black" }} />
+            </IconButton>
+          </Box>
+        </Box>
+      </Box>
     );
 }
 

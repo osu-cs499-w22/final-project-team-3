@@ -3,17 +3,24 @@ import { Box, Typography, Divider } from "@mui/material";
 const CustomList = ({ title, listContent, headers }) => {
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "column", width: "1100px" }}>
-      <Typography
-            sx={{
-              fontSize: "30px",
-              color: "white",
-              fontFamily: "Raleway",
-              fontWeight: "bold",
-            }}
-          >
-            {title}
-          </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "1100px",
+          height: "100%",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "white",
+            fontFamily: "Raleway",
+            fontWeight: "bold",
+          }}
+        >
+          {title}
+        </Typography>
         <Box
           sx={{
             display: "flex",
@@ -23,7 +30,7 @@ const CustomList = ({ title, listContent, headers }) => {
         >
           {headers.map((header) => (
             <>
-              <Box sx={{ minWidth: "350px" }}>
+              <Box sx={{ minWidth: "350px"}}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -35,7 +42,7 @@ const CustomList = ({ title, listContent, headers }) => {
                   {header.text1}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: "200px" }}>
+              <Box sx={{ minWidth: "250px", ml: "10px" }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -47,7 +54,7 @@ const CustomList = ({ title, listContent, headers }) => {
                   {header.text2}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: "250px" }}>
+              <Box sx={{ minWidth: "250px", ml: '10px' }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -59,7 +66,7 @@ const CustomList = ({ title, listContent, headers }) => {
                   {header.text3}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: "150px" }}>
+              <Box sx={{ minWidth: "150px", ml: '10px' }}>
                 <Typography
                   sx={{
                     fontSize: "24px",
@@ -74,8 +81,8 @@ const CustomList = ({ title, listContent, headers }) => {
             </>
           ))}
         </Box>
-        <Divider sx={{ color: "white", mb: "30px", fontWeight: 'bold' }} />
-        <Box sx={{ width: "1100px", height: "500px", overflowY: "auto" }}>
+        <Divider sx={{ color: "white", mb: "30px", fontWeight: "bold" }} />
+        <Box sx={{ width: "1100px", height: "100%", overflowY: "auto" }}>
           {listContent.map((item) => (
             <>
               <Box
@@ -91,6 +98,7 @@ const CustomList = ({ title, listContent, headers }) => {
                     justifyContent: "flex-start",
                     alignItems: "center",
                     minWidth: "350px",
+                    maxWidth: "350px",
                   }}
                 >
                   <Typography
@@ -110,7 +118,9 @@ const CustomList = ({ title, listContent, headers }) => {
                     flexDirection: "row",
                     justifyContent: "flex-start",
                     alignItems: "center",
-                    minWidth: "200px",
+                    minWidth: "250px",
+                    maxWidth: "250px",
+                    ml: "10px",
                   }}
                 >
                   <Typography
@@ -130,7 +140,9 @@ const CustomList = ({ title, listContent, headers }) => {
                     flexDirection: "row",
                     justifyContent: "flex-start",
                     alignItems: "center",
-                    minWidth: "300px",
+                    minWidth: "250px",
+                    maxWidth: "250px",
+                    ml: "10px",
                   }}
                 >
                   <Typography
@@ -151,6 +163,7 @@ const CustomList = ({ title, listContent, headers }) => {
                     justifyContent: "flex-start",
                     alignItems: "center",
                     minWidth: "150px",
+                    ml: "10px",
                   }}
                 >
                   <img height="80px" src={item.text4} alt="album cover" />
