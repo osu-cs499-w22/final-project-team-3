@@ -49,7 +49,7 @@ function FollowedArtists(props) {
             setListContent(temp);
             console.log(listContent)
         })
-    }, [token, offset, listContent]);
+    }, [token, offset]);
 
     function handlePrev() {
         if (offset < 50) {
@@ -78,7 +78,7 @@ function FollowedArtists(props) {
       >
         <Box sx={{ height: "90%" }}>
           <CustomList
-            title={"Liked Songs"}
+            title={"Followed Artists"}
             listContent={listContent}
             headers={headers}
           />
