@@ -115,8 +115,8 @@ function WebPlayback(props) {
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                width: "100vw",
-                height: "100%",
+                height: "92vh",
+                width: "100%",
               }}
             >
               <Box
@@ -127,10 +127,9 @@ function WebPlayback(props) {
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
-                  pb: "175px",
                 }}
               >
-                <Box sx={{ width: "500px", height: "550px" }}>
+                <Box sx={{ width: "60%", height: "80%" }}>
                   <Card
                     sx={{
                       width: "100%",
@@ -153,10 +152,9 @@ function WebPlayback(props) {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  pb: "100px",
                 }}
               >
-                <Box sx={{ width: "400px", height: "400px" }}>
+                <Box sx={{ width: "50%", height: "55%" }}>
                   <Card
                     sx={{
                       width: "100%",

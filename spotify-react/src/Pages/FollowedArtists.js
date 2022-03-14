@@ -39,8 +39,10 @@ function FollowedArtists(props) {
                     console.log(artist);
                     temp.push({
                         text1: artist.name,
-                        text2: numeral(artist.followers.total).format('0,0'),
-                        text3: titleCase(artist.genres[0]),
+                        // text2: numeral(artist.followers.total).format('0,0'),
+                        // text3: titleCase(artist.genres[0]),
+                        text2: artist.followers.total,
+                        text3: artist.genres[0],
                         text4: artist.images[2].url
                     });
                 });

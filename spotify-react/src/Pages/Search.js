@@ -8,6 +8,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import CustomList from "../Components/CustomList";
 import fetchSearchResults from "../hooks/useSearch"
+import numeral from 'numeral';
 
 const songHeaders = [
   {
@@ -94,7 +95,7 @@ function Search(props) {
             results.map((result) => {
               temp.push({
                 text1: result.name,
-                text2: result.followers.total,
+                text2: numeral(result.followers.total).format('0,0'),
                 text3: titleCase(result.genres[0]),
                 text4: (result.images.length > 0) ? result.images[2].url : ''
               })
