@@ -3,9 +3,11 @@ import { useState } from "react";
 import styled from '@emotion/styled/macro';
 import { Box, Typography, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add'
+import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import CustomList from "../Components/CustomList";
 import fetchSearchResults from "../hooks/useSearch"
-import { Button } from "bootstrap";
 
 const songHeaders = [
   {
@@ -49,6 +51,14 @@ const Input = styled.input`
   font-size: 20px;
 `;
 
+function titleCase(str) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+  }
+  return str.join(' ');
+}
+
 function Search(props) {
     const token = props.token
     const [song, setSong] = useState('')
@@ -57,6 +67,9 @@ function Search(props) {
     const [headers, setHeaders] = useState(songHeaders)
     const [offset, setOffset] = useState(0)
     const [listContent, setListContent] = useState([])
+    const [songFilter, setSongFilter] = useState(false);
+    const [albumFilter, setAlbumFilter] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
       fetchSearchResults(token, paramSong, type, offset).then((results) => {
@@ -66,7 +79,7 @@ function Search(props) {
         // console.log("results: ", results);
         if(results && results.length > 0) {
           console.log("adding")
-          if (type == 'track') {
+          if (type === 'track') {
             results.map((result) => {
               temp.push({
                 text1: result.name,
@@ -82,7 +95,7 @@ function Search(props) {
               temp.push({
                 text1: result.name,
                 text2: result.followers.total,
-                text3: result.genres[0],
+                text3: titleCase(result.genres[0]),
                 text4: (result.images.length > 0) ? result.images[2].url : ''
               })
             })
@@ -94,7 +107,7 @@ function Search(props) {
 
     function handlePrev() {
       if(offset < 50) {
-        console.log("cannot decrememnt further... At list beginning");
+        console.log("cannot decrement further... At list beginning");
       } else {
         setOffset(offset - 50)
       }
@@ -106,24 +119,35 @@ function Search(props) {
     console.log("listContent: ", listContent)
 
     return (
-      <Box sx={{
-        height: "500px",
-        width: "700px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center"
-      }} >
+      <Box
+        sx={{
+          height: "92vh",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
         <Box
           sx={{
-            height: "300px",
-            width: "500px",
+            height: "auto",
+            width: "90vw",
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
           }}
         >
           <Box>
-            <Box sx={{ width: "100%", pb: '30px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <Box
+              sx={{
+                width: "100%",
+                py: "5px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
               <Typography sx={{ pl: "10px", color: "white" }}>
                 What do you want to listen to?
               </Typography>
@@ -131,9 +155,9 @@ function Search(props) {
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                setParamSong(song)
-                setListContent([])
-                setOffset(0)
+                setParamSong(song);
+                setListContent([]);
+                setOffset(0);
                 console.log("song searched");
               }}
             >
@@ -146,43 +170,176 @@ function Search(props) {
               >
                 <Input
                   value={song}
-                  placeholder="Search for a song..."
+                  placeholder="Search..."
                   onChange={(e) => setSong(e.target.value)}
                 />{" "}
                 <IconButton type="submit">
-                  <SearchIcon fontSize="large" sx={{ color: "white", "&:hover": {color: 'green'} }} />
+                  <SearchIcon
+                    fontSize="large"
+                    sx={{ color: "white", "&:hover": { color: "green" } }}
+                  />
                 </IconButton>
               </Box>
-              <button 
-                onClick={(e) => {
-                  e.preventDefault();
-                  setType('track')
-                  setHeaders(songHeaders)
-                  setListContent([])
-                  setOffset(0)
-                }}>Songs</button>
-              <button onClick={(e) => {
-                e.preventDefault();
-                setType('artist')
-                setHeaders(artistHeaders)
-                setListContent([])
-                setOffset(0)
-                }}>Artists</button>
-              <button onClick={(e) => {
-                e.preventDefault();
-                setSong('');
-                setParamSong('');
-                setListContent([])
-                setOffset(0)
-              }}>Clear</button>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                {!songFilter ? (
+                  <IconButton
+                    sx={{
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "#565656" },
+                      borderRadius: "5px",
+                      mt: "5px",
+                    }}
+                    onClick={(e) => {
+                      setSongFilter(true);
+                      console.log(songFilter);
+                      e.preventDefault();
+                      setType("track");
+                      setHeaders(songHeaders);
+                      setListContent([]);
+                      setOffset(0);
+                    }}
+                  >
+                    <AddIcon sx={{ color: "black" }} />
+                    <Typography sx={{ color: "black", fontFamily: "Raleway" }}>
+                      Songs
+                    </Typography>
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#565656",
+                      "&:hover": { backgroundColor: "#565656", cursor: "auto" },
+                      borderRadius: "5px",
+                      mt: "5px",
+                    }}
+                  >
+                    <AddIcon sx={{ color: "black" }} />
+                    <Typography sx={{ color: "black", fontFamily: "Raleway" }}>
+                      Songs
+                    </Typography>
+                  </IconButton>
+                )}
+                {!albumFilter ? (
+                  <IconButton
+                    sx={{
+                      mx: "10px",
+                      mt: "5px",
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "#565656" },
+                      borderRadius: "5px",
+                    }}
+                    onClick={(e) => {
+                      setAlbumFilter(true);
+                      e.preventDefault();
+                      setType("artist");
+                      setHeaders(artistHeaders);
+                      setListContent([]);
+                      setOffset(0);
+                    }}
+                  >
+                    <AddIcon sx={{ color: "black" }} />
+                    <Typography sx={{ color: "black", fontFamily: "Raleway" }}>
+                      Artists
+                    </Typography>
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    sx={{
+                      mx: "10px",
+                      mt: "5px",
+                      backgroundColor: "#565656",
+                      "&:hover": { backgroundColor: "#565656", cursor: "auto" },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <AddIcon sx={{ color: "black" }} />
+                    <Typography sx={{ color: "black", fontFamily: "Raleway" }}>
+                      Artists
+                    </Typography>
+                  </IconButton>
+                )}
+
+                <IconButton
+                  sx={{
+                    mt: "5px",
+                    backgroundColor: "white",
+                    "&:hover": { backgroundColor: "#565656" },
+                    borderRadius: "5px",
+                  }}
+                  onClick={(e) => {
+                    setAlbumFilter(false);
+                    setSongFilter(false);
+                    e.preventDefault();
+                    setSong("");
+                    setParamSong("");
+                    setListContent([]);
+                    setOffset(0);
+                  }}
+                >
+                  <Typography sx={{ color: "black", fontFamily: "Raleway" }}>
+                    Clear
+                  </Typography>
+                </IconButton>
+              </Box>
             </Form>
           </Box>
         </Box>
-        <CustomList title={"Search Results"} listContent={listContent} headers={headers} />
-        <button onClick={handlePrev}>prev</button>
-        <button onClick={handleNext}>next</button>
+        <Box sx={{ height: "70%" }}>
+          {listContent?.length > 0 && loading === false && (
+            <>
+              <CustomList
+                title={"Search Results"}
+                listContent={listContent}
+                headers={headers}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  mt: '10px'
+                }}
+              >
+                <IconButton
+                  onClick={handlePrev}
+                  sx={{
+                    backgroundColor: "white",
+                    "&:hover": { backgroundColor: "#565656" },
+                    borderRadius: "5px",
+                  }}
+                >
+                  {" "}
+                  <NavigateBeforeIcon sx={{ color: "black" }} />
+                </IconButton>
+                <IconButton
+                  onClick={handleNext}
+                  sx={{
+                    backgroundColor: "white",
+                    "&:hover": { backgroundColor: "#565656" },
+                    borderRadius: "5px",
+                  }}
+                >
+                  <NavigateNextIcon sx={{ color: "black" }} />
+                </IconButton>
+              </Box>
+            </>
+          )}
+          {listContent.length === 0 &&  (
+            <Box sx={{mt: '50px'}}>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontSize: "25px",
+                  fontFamily: "Raleway",
+                  fontWeight: "bold",
+                }}
+              >
+                Search results will appear here!
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
-      
     );
 }
 
