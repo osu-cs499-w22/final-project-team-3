@@ -18,7 +18,7 @@ async function fetchLikedSongs(token, offset) {
             }
         );
         responseBody = await response.json();
-        console.log("responsebody: ", responseBody);
+        // console.log("responsebody: ", responseBody);
     } catch (e) {
         if (e instanceof DOMException) {
             console.log("== HTTP request cancelled");
