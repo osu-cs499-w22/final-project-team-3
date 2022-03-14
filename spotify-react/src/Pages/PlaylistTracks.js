@@ -25,24 +25,25 @@ function PlaylistTracks(props) {
 
     useEffect(() => {
       fetchPlaylist(token, params.playlist).then((playlist) => {
-        let temp = [];
-        console.log("playlist:", playlist);
-        if (playlist && playlist.tracks) {
-          fetchPlaylistTracks(token, params.playlist, offset).then((tracks) => {
-            tracks.map((song) => {
-              temp.push({
-                id: song.track.id,
-                type: 'trackDetails',
-                text1: song.track.name,
-                text2: song.track.artists[0].name,
-                text3: song.track.album.name,
-                text4: song.track.album.images[2].url,
-              });
-            })
+        setPlaylistName(playlist.name)
+      })
+
+      let temp = [];
+      fetchPlaylistTracks(token, params.playlist, offset).then((tracks) => {
+        if (tracks && tracks.length > 0) {
+          console.log(tracks)
+          tracks.map((song) => {
+            temp.push({
+              id: song.track.id,
+              type: 'trackDetails',
+              text1: song.track.name,
+              text2: song.track.artists[0].name,
+              text3: song.track.album.name,
+              text4: song.track.album.images[2].url,
+            });
           })
         }
         setListContent(temp);
-        setPlaylistName(playlist.name)
       });
     }, [token, offset]);
 
@@ -56,7 +57,7 @@ function PlaylistTracks(props) {
     function handleNext() {
         setOffset(offset + 50);
     }
-    
+
     console.log("listContent", listContent);
     return (
       <Box

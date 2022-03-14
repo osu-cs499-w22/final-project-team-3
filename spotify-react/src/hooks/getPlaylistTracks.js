@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 async function fetchPlaylistTracks(token, id, offset) {
     let responseBody = {};
     try {
-        // asdlgkas
         console.log(
             "fetching",
             `https://api.spotify.com/v1/playlists/${id}/tracks?offset=${offset}&limit=100`
