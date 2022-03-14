@@ -7,6 +7,7 @@ import fetchPlayists from "../hooks/userPlaylists";
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { Outlet } from "react-router-dom";
 
 const headers = [
     {
@@ -45,6 +46,8 @@ function Playlists(props) {
                 // this can be done using properies of map return
                 playlists.map((playlist) => {
                     temp.push({
+                        type: 'playlists',
+                        id: playlist.id,
                         text1: playlist.name,
                         text2: playlist.tracks.total,
                         text3: playlist.owner.display_name,
