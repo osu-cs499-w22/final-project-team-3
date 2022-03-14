@@ -12,16 +12,20 @@ import WebPlayback from "./Pages/WebPlayback";
 import "./App.css";
 import Wrapper from "./Components/Wrapper";
 import PlaylistTracks from "./Pages/PlaylistTracks";
+import CircularProgress from '@mui/material/CircularProgress';
 
 function App() {
     const [token, setToken] = useState("");
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         async function getToken() {
+          setLoading(true)
             const response = await fetch("/auth/token");
             const json = await response.json();
             console.log(json.access_token);
             setToken(json.access_token);
+            setLoading(false)
         }
 
         getToken();
@@ -30,7 +34,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={(token === '') ? <Wrapper><Login /></Wrapper> : <Wrapper><Home/></Wrapper>} />
+        <Route path="/" element={ loading ? (<Wrapper><CircularProgress /></Wrapper>) : ((token === '') ? <Wrapper><Login /></Wrapper> : <Wrapper><Search token={token}/></Wrapper>)} />
         <Route path="/playlists" element={<Wrapper><Playlists token={token}/></Wrapper>} />
         <Route path="/savedTracks" element={<Wrapper><SavedTracks token={token}/></Wrapper>} />
         <Route path="/login" element={<Wrapper><Login /></Wrapper>} />
