@@ -1,37 +1,34 @@
 import React, { useState, useEffect } from 'react';
 
-function useFollowedArtistsSearch(access_token) {
-    const [ artists, setArtists ] = useState([]);
-    const [ loading, setLoading ] = useState(false);
+async function fetchFollowedArtists(access_token, offset) {
+    var limit = 50;
+    let responseBody = {};
+    try {
+        console.log(
+            "fetching",
+            `https://api.spotify.com/v1/me/following?type=artist&limit=${limit}&offset=${offset}`
+        );
 
-    const controller = new AbortController();
-    useEffect(() => {
-        let ignore = false;
-        async function fetchSearchResults() {
-            let responseBody = {};
-            setLoading(true);
-            const response = await fetch(
-                `https://api.spotify.com/v1/me/following?type=artist`, {
+        const response = await fetch(
+            `https://api.spotify.com/v1/me/following?type=artist&limit=${limit}&offset=${offset}`,
+            {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${access_token}`
-            }});
-            responseBody = await response.json();
-
-            if(!ignore) {
-                setLoading(false);
-                setArtists(responseBody.artists.items || []);
+                },
             }
+        );
+        responseBody = await response.json();
+        console.log("responsebody: ", responseBody);
+    } catch (e) {
+        if (e instanceof DOMException) {
+            console.log("== HTTP request cancelled");
+        } else {
+            throw e;
         }
-        fetchSearchResults()
-        return () => {
-            controller.abort();
-            ignore = true;
-        }
-    }, [ access_token ]);
-
-    return [artists, loading];
+    }
+    return responseBody.artists.items;
 }
 
-export default useFollowedArtistsSearch
+export default fetchFollowedArtists
