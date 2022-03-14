@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef } from "react";
 import { useState } from "react";
 import styled from '@emotion/styled/macro';
 import { Box, Typography, IconButton } from '@mui/material'
@@ -9,6 +9,8 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import CustomList from "../Components/CustomList";
 import fetchSearchResults from "../hooks/useSearch"
 import numeral from 'numeral';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const songHeaders = [
   {
@@ -60,6 +62,10 @@ function titleCase(str) {
   return str.join(' ');
 }
 
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Search(props) {
     const token = props.token
     const [song, setSong] = useState('')
@@ -71,6 +77,18 @@ function Search(props) {
     const [songFilter, setSongFilter] = useState(true);
     const [albumFilter, setAlbumFilter] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+
+    const handleClick = () => {
+      setAlertOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setAlertOpen(false);
+    }
 
     useEffect(() => {
       fetchSearchResults(token, paramSong, type, offset).then((results) => {
@@ -87,7 +105,7 @@ function Search(props) {
                 type: 'trackDetails',
                 text1: result.name,
                 text2: result.artists[0].name,
-                text3: "Save Song",
+                text3: result.popularity,
                 text4: result.album.images[2].url
               })
             })
@@ -112,12 +130,16 @@ function Search(props) {
 
     function handlePrev() {
       if(offset < 50) {
-        console.log("cannot decrement further... At list beginning");
+        handleClick()
       } else {
+        const list = document.getElementById("customList")
+        list.scroll({ top: 0, behavior: "smooth" });
         setOffset(offset - 50)
       }
     }
     function handleNext() {
+      const list = document.getElementById("customList")
+      list.scroll({ top: 0, behavior: "smooth" });
       setOffset(offset + 50);
     }
 
@@ -274,8 +296,6 @@ function Search(props) {
                     borderRadius: "5px",
                   }}
                   onClick={(e) => {
-                    setAlbumFilter(false);
-                    setSongFilter(true);
                     e.preventDefault();
                     setSong("");
                     setParamSong("");
@@ -295,7 +315,7 @@ function Search(props) {
           {listContent?.length > 0 && loading === false && (
             <>
               <CustomList
-                customIcon={type === 'track'}
+                // customIcon={type === 'track'}
                 title={"Search Results"}
                 listContent={listContent}
                 headers={headers}
@@ -319,16 +339,41 @@ function Search(props) {
                   {" "}
                   <NavigateBeforeIcon sx={{ color: "black" }} />
                 </IconButton>
-                <IconButton
-                  onClick={handleNext}
-                  sx={{
-                    backgroundColor: "white",
-                    "&:hover": { backgroundColor: "#565656" },
-                    borderRadius: "5px",
-                  }}
+                <Snackbar
+                  open={alertOpen}
+                  autoHideDuration={6000}
+                  onClose={handleClose}
                 >
-                  <NavigateNextIcon sx={{ color: "black" }} />
-                </IconButton>
+                  <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    sx={{ width: "100%" }}
+                  >
+                    At beginning of list!
+                  </Alert>
+                </Snackbar>
+                {listContent?.length < 50 ? (
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#565656",
+                      "&:hover": { backgroundColor: "#565656", cursor: 'auto' },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <NavigateNextIcon sx={{ color: "black" }} />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={handleNext}
+                    sx={{
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "#565656" },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <NavigateNextIcon sx={{ color: "black" }} />
+                  </IconButton>
+                )}
               </Box>
             </>
           )}

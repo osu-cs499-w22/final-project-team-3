@@ -121,7 +121,7 @@ function TrackDetails(props) {
                 sx={{ color: "white" }}
                 fontSize="large"
                 onClick={() => {
-                  addRemoveSong(token, params.track, 'DELETE')
+                  addRemoveSong(token, params.track, "DELETE");
                   setFavorite(false);
                 }}
               />
@@ -131,7 +131,7 @@ function TrackDetails(props) {
                 sx={{ color: "white" }}
                 fontSize="large"
                 onClick={() => {
-                  addRemoveSong(token, params.track, 'PUT')
+                  addRemoveSong(token, params.track, "PUT");
                   setFavorite(true);
                 }}
               />
@@ -148,7 +148,14 @@ function TrackDetails(props) {
             }}
           >
             <Typography sx={{ color: "white", fontSize: "20px", pr: "10px" }}>
-              <Link to={`/artistDetails/${trackContent.artistId}`} >
+              <Link
+                to={`/artistDetails/${trackContent.artistId}`}
+                style={{
+                  textDecorationColor: "white",
+                  fontFamily: "Raleway",
+                  color: "white",
+                }}
+              >
                 {trackContent.artistName}
               </Link>
             </Typography>
@@ -166,7 +173,7 @@ function TrackDetails(props) {
             <IconButton>
               {playing && (
                 <PauseCircleFilledRoundedIcon
-                  sx={{ color: "white", fontSize: 50  }}
+                  sx={{ color: "white", fontSize: 50 }}
                   onClick={() => setPlaying(false)}
                 />
               )}

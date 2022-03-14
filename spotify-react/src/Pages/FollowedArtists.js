@@ -60,7 +60,7 @@ function FollowedArtists(props) {
                         type: 'artistDetails',
                         text1: artist.name,
                         text2: numeral(artist.followers.total).format('0,0'),
-                        text3: titleCase(artist.genres[0]),
+                        text3: (artist.genres.length > 0) ? titleCase(artist.genres[0]) : '',
                         text4: artist.images[2].url
                     });
                 });

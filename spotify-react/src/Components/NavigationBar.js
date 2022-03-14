@@ -89,14 +89,12 @@ function NavigationBar() {
           >
             <Box sx={{ width: 250 }} role="presentation">
               <List>
-                <Link to="/login" style={{ textDecoration: 'none', fontFamily: 'Raleway', color: 'black' }}>
-                  <ListItem button key={"Logout of Username"} onClick={() => toggleDrawer(false)}>
-                    <Avatar sx={{ backgroundColor: "#521987", mr: "20px" }}>
-                      U
-                    </Avatar>
-                    <ListItemText primary={"Logout of Username"} />
-                  </ListItem>
-                </Link>
+                <ListItem key={"Username"}>
+                  <Avatar sx={{ backgroundColor: "#521987", mr: "20px" }}>
+                    <Typography>U</Typography>
+                  </Avatar>
+                  <ListItemText primary={"Username"} />
+                </ListItem>
               </List>
               <Divider />
               <List>
