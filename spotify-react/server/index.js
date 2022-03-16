@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require("request");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 const port = 5000;
 
@@ -25,6 +26,34 @@ var generateRandomString = function (length) {
 };
 
 var app = express();
+
+// Cors 
+app.use(cors({
+    origin: "http://localhost:3000",
+}))
+
+/* We are running the command `npx lyrics-searcher "song name" "artist name"` and then sending the
+output to our endpoint. */
+app.get('/lyrics', (req, res) => {
+
+    // We want to run the command `npx lyrics-searcher "song name" "artist name"`
+    // and then send the output to our endpoint
+    var query = req.query.q;
+    var artist = req.query.a;
+    var command = "npx lyrics-searcher \"" + query + "\" \"" + artist + "\"";
+
+    // Run the command
+    var exec = require('child_process').exec;
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.log(error);
+            res.send("Error");
+            return
+        }
+        res.send(stdout);
+    });
+
+})
 
 app.get("/auth/login", (req, res) => {
     var scope = "streaming user-read-email user-read-private";
@@ -79,6 +108,8 @@ app.get("/auth/callback", (req, res) => {
 app.get("/auth/token", (req, res) => {
     res.json({ access_token: access_token });
 });
+
+
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`);
