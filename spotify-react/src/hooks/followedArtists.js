@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-async function fetchFollowedArtists(access_token, offset) {
+async function fetchFollowedArtists(access_token, apiUrl) {
     var limit = 50;
-    console.log("offset: " + offset)
+    console.log("apiUrl: " + apiUrl);
     let responseBody = {};
     try {
-        console.log(
-            "fetching",
-            `https://api.spotify.com/v1/me/following?type=artist&limit=${limit}&offset=${offset}`
-        );
+        console.log("fetching", `${apiUrl}`);
 
-        const response = await fetch(
-            `https://api.spotify.com/v1/me/following?type=artist&limit=${limit}&offset=${offset}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${access_token}`
-                },
-            }
-        );
+        const response = await fetch(`${apiUrl}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
         responseBody = await response.json();
         console.log("responsebody: ", responseBody);
     } catch (e) {
@@ -29,7 +23,7 @@ async function fetchFollowedArtists(access_token, offset) {
             throw e;
         }
     }
-    return responseBody.artists.items;
+    return responseBody.artists;
 }
 
-export default fetchFollowedArtists
+export default fetchFollowedArtists;
