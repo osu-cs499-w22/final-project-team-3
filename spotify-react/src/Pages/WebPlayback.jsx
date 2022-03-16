@@ -7,6 +7,7 @@ import PauseCircleFilledRoundedIcon from "@mui/icons-material/PauseCircleFilledR
 import SkipNextRoundedIcon from "@mui/icons-material/SkipNextRounded";
 import SkipPreviousRoundedIcon from "@mui/icons-material/SkipPreviousRounded";
 import axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const track = {
   name: "",
@@ -26,6 +27,7 @@ function WebPlayback(props) {
   const [playing, setPlaying] = useState(false);
   const [lyrics, setLyrics] = useState([]);
   const [lyricsLookUp, setLyricsLookUp] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function getLyrics(title, artist) {
     if (lyricsLookUp !== title + artist) {
@@ -74,8 +76,9 @@ function WebPlayback(props) {
           return;
         }
 
-        getLyrics(state.track_window.current_track.name, state.track_window.current_track.artists[0].name);
+        
         setTrack(state.track_window.current_track);
+        getLyrics(state.track_window.current_track.name, state.track_window.current_track.artists[0].name);
         setPaused(state.paused);
 
         player.getCurrentState().then((state) => {
@@ -146,22 +149,36 @@ function WebPlayback(props) {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
                   justifyContent: "center",
-                  height: '100%'
+                  height: "100%",
                 }}
               >
-                {lyrics.length > 0 ? (
-                  <Box sx={{overflowY: 'auto', height: 'auto'}}>
+                {loading === true || lyrics[0] === "Error" ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: 'center',
+                      width: "100%",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : lyrics.length > 0 ? (
+                  <Box sx={{ overflowY: "auto", height: "auto", padding: '5px', width: '100%' }}>
                     {lyrics.map((lyric, index) => {
                       return (
-                          <Typography
-                            sx={{
-                              fontSize: "20px",
-                            }}
-                          >
-                            {lyric}
-                          </Typography>
+                        <Typography
+                          key={index}
+                          sx={{
+                            fontFamily: "Raleway",
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {lyric}
+                        </Typography>
                       );
                     })}
                   </Box>
