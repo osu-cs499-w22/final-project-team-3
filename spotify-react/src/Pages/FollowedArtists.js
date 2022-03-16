@@ -44,6 +44,8 @@ function FollowedArtists(props) {
     );
     const [apiNext, setApiNext] = useState("");
     const [apiPrev, setApiPrev] = useState("");
+    const [pages, setPages] = useState(0);
+    const [lastPage, setlastPage] = useState(false)
 
     const handleClick = () => {
         setAlertOpen(true);
@@ -59,7 +61,11 @@ function FollowedArtists(props) {
     useEffect(() => {
         fetchFollowedArtists(token, apiUrl).then((artists) => {
             let temp = [];
-            console.log(artists);
+            console.log("next: ", artists.next);
+            console.log(pages)
+            if(artists.next === null){
+                setlastPage(true)
+            }
             if (artists.items && artists.items.length > 0) {
                 apiList.push(artists.next);
 
@@ -81,7 +87,8 @@ function FollowedArtists(props) {
         });
     }, [token, apiUrl]);
 
-    function handlePrev() {
+    function handleNext() {
+        setPages(pages + 1)
         const list = document.getElementById("customList");
         list.scroll({ top: 0, behavior: "smooth" });
         console.log(apiList);
@@ -92,7 +99,10 @@ function FollowedArtists(props) {
         setApiUrl(apiList[apiList.length - 1]);
     }
 
-    function handleNext() {
+    function handlePrev() {
+        if(pages !== 0){
+            setPages(pages - 1)
+        }
         const list = document.getElementById("customList");
         list.scroll({ top: 0, behavior: "smooth" });
         setApiUrl(apiList[apiList.length - 1]);
@@ -101,99 +111,114 @@ function FollowedArtists(props) {
     console.log("listContent", listContent);
 
     return (
-        <Box
-            sx={{
-                height: "92vh",
-                width: "100%",
+      <Box
+        sx={{
+          height: "92vh",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box sx={{ height: "90%" }}>
+          {listContent?.length === 0 ? (
+            <Box
+              sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexdirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-start",
-            }}
-        >
-            <Box sx={{ height: "90%" }}>
-                {listContent?.length === 0 ? (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexdirection: "row",
-                            alignItems: "center",
-                            height: "100%",
-                        }}
-                    >
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <>
-                        <CustomList
-                            title={"Followed Artists"}
-                            listContent={listContent}
-                            headers={headers}
-                        />
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                mt: "10px",
-                            }}
-                        >
-                            <IconButton
-                                onClick={handlePrev}
-                                sx={{
-                                    backgroundColor: "white",
-                                    "&:hover": { backgroundColor: "#565656" },
-                                    borderRadius: "5px",
-                                }}
-                            >
-                                {" "}
-                                <NavigateBeforeIcon sx={{ color: "black" }} />
-                            </IconButton>
-                            <Snackbar
-                                open={alertOpen}
-                                autoHideDuration={6000}
-                                onClose={handleClose}
-                            >
-                                <Alert
-                                    onClose={handleClose}
-                                    severity="error"
-                                    sx={{ width: "100%" }}
-                                >
-                                    At beginning of list!
-                                </Alert>
-                            </Snackbar>
-                            {listContent?.length < 50 ? (
-                                <IconButton
-                                    sx={{
-                                        backgroundColor: "#565656",
-                                        "&:hover": {
-                                            backgroundColor: "#565656",
-                                            cursor: "auto",
-                                        },
-                                        borderRadius: "5px",
-                                    }}
-                                >
-                                    <NavigateNextIcon sx={{ color: "black" }} />
-                                </IconButton>
-                            ) : (
-                                <IconButton
-                                    onClick={handleNext}
-                                    sx={{
-                                        backgroundColor: "white",
-                                        "&:hover": {
-                                            backgroundColor: "#565656",
-                                        },
-                                        borderRadius: "5px",
-                                    }}
-                                >
-                                    <NavigateNextIcon sx={{ color: "black" }} />
-                                </IconButton>
-                            )}
-                        </Box>
-                    </>
-                )}
+                height: "100%",
+              }}
+            >
+              <CircularProgress />
             </Box>
+          ) : (
+            <>
+              <CustomList
+                title={"Followed Artists"}
+                listContent={listContent}
+                headers={headers}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  mt: "10px",
+                }}
+              >
+                {pages === 0 ? (
+                  <IconButton
+                    onClick={() => {handleClick()}}
+                    sx={{
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "#565656" },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {" "}
+                    <NavigateBeforeIcon sx={{ color: "black" }} />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={handlePrev}
+                    sx={{
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "#565656" },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {" "}
+                    <NavigateBeforeIcon sx={{ color: "black" }} />
+                  </IconButton>
+                )}
+
+                <Snackbar
+                  open={alertOpen}
+                  autoHideDuration={6000}
+                  onClose={handleClose}
+                >
+                  <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    sx={{ width: "100%" }}
+                  >
+                    At beginning of list!
+                  </Alert>
+                </Snackbar>
+                {lastPage ? (
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#565656",
+                      "&:hover": {
+                        backgroundColor: "#565656",
+                        cursor: "auto",
+                      },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <NavigateNextIcon sx={{ color: "black" }} />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={handleNext}
+                    sx={{
+                      backgroundColor: "white",
+                      "&:hover": {
+                        backgroundColor: "#565656",
+                      },
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <NavigateNextIcon sx={{ color: "black" }} />
+                  </IconButton>
+                )}
+              </Box>
+            </>
+          )}
         </Box>
+      </Box>
     );
 }
 
