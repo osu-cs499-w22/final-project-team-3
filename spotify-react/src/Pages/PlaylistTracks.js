@@ -1,11 +1,14 @@
 import { Box, IconButton } from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,forwardRef } from "react";
 import CustomList from "../Components/CustomList";
 import fetchPlaylist from "../hooks/getPlaylist";
 import { useParams } from "react-router";
 import fetchPlaylistTracks from "../hooks/getPlaylistTracks";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 const headers = [
     {
         text1: "Title",
@@ -15,6 +18,10 @@ const headers = [
     },
 ];
 
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 let songs = [];
 function PlaylistTracks(props) {
     const params = useParams()
@@ -22,6 +29,19 @@ function PlaylistTracks(props) {
     const [offset, setOffset] = useState(0);
     const [listContent, setListContent] = useState([]);
     const [playlistName, setPlaylistName] = useState('');
+    const [alertOpen, setAlertOpen] = useState(false)
+
+    const handleClick = () => {
+      setAlertOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setAlertOpen(false);
+    }
+
 
     useEffect(() => {
       fetchPlaylist(token, params.playlist).then((playlist) => {
@@ -49,12 +69,16 @@ function PlaylistTracks(props) {
 
     function handlePrev() {
         if (offset < 50) {
-            console.log("cannot decrement further... At list beginning");
+          handleClick()
         } else {
+          const list = document.getElementById("customList")
+          list.scroll({ top: 0, behavior: "smooth" });
             setOffset(offset - 50);
         }
     }
     function handleNext() {
+      const list = document.getElementById("customList")
+      list.scroll({ top: 0, behavior: "smooth" });
         setOffset(offset + 50);
     }
 
@@ -95,16 +119,41 @@ function PlaylistTracks(props) {
               {" "}
               <NavigateBeforeIcon sx={{ color: "black" }} />
             </IconButton>
-            <IconButton
-              onClick={handleNext}
-              sx={{
-                backgroundColor: "white",
-                "&:hover": { backgroundColor: "#565656" },
-                borderRadius: "5px",
-              }}
+            <Snackbar
+              open={alertOpen}
+              autoHideDuration={6000}
+              onClose={handleClose}
             >
-              <NavigateNextIcon sx={{ color: "black" }} />
-            </IconButton>
+              <Alert
+                onClose={handleClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                At beginning of list!
+              </Alert>
+            </Snackbar>
+            {listContent?.length < 50 ? (
+              <IconButton
+                sx={{
+                  backgroundColor: "#565656",
+                  "&:hover": { backgroundColor: "#565656", cursor: "auto" },
+                  borderRadius: "5px",
+                }}
+              >
+                <NavigateNextIcon sx={{ color: "black" }} />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={handleNext}
+                sx={{
+                  backgroundColor: "white",
+                  "&:hover": { backgroundColor: "#565656" },
+                  borderRadius: "5px",
+                }}
+              >
+                <NavigateNextIcon sx={{ color: "black" }} />
+              </IconButton>
+            )}
           </Box>
         </Box>
       </Box>
