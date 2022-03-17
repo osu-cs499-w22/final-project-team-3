@@ -231,41 +231,6 @@ function TrackDetails(props) {
             </Link>
           </Typography>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            pt: "15px",
-          }}
-        >
-          <IconButton>
-            {playing && (
-              <PauseCircleFilledRoundedIcon
-                sx={{ color: "white", fontSize: 50 }}
-                onClick={() => setPlaying(false)}
-              />
-            )}
-            {!playing && (
-              <PlayCircleRoundedIcon
-                sx={{ color: "white", fontSize: 50 }}
-                onClick={() => setPlaying(true)}
-              />
-            )}
-          </IconButton>
-        </Box>
-
-        {/* <button onClick={() => {
-            addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'PUT')
-            setSaved(true)
-            }}>Add</button>
-          <button onClick={() => {
-            addRemoveSong(token, '1DMEzmAoQIikcL52psptQL', 'DELETE')
-            setSaved(false)
-            }}>Remove</button>
-          <button>{saved ? "Saved" : "Not Saved"}</button> */}
       </Box>
     </Box>
   );

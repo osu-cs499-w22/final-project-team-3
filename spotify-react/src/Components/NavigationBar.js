@@ -15,6 +15,8 @@ import {
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from "@mui/icons-material/Menu";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import { Link } from "react-router-dom";
 
@@ -72,15 +74,14 @@ function NavigationBar() {
       </Box>
       <Box sx={{ pr: "10px" }}>
         <Box>
-          <Avatar
+          <MenuIcon
             sx={{
-              backgroundColor: "#521987",
+              color: 'white',
               "&:hover": { cursor: "pointer" },
             }}
             onClick={() => toggleDrawer(true)}
-          >
-            U
-          </Avatar>
+          />
+
           <Drawer
             variant="temporary"
             anchor="right"
@@ -89,12 +90,7 @@ function NavigationBar() {
           >
             <Box sx={{ width: 250 }} role="presentation">
               <List>
-                <ListItem key={"Username"}>
-                  <Avatar sx={{ backgroundColor: "#521987", mr: "20px" }}>
-                    <Typography>U</Typography>
-                  </Avatar>
-                  <ListItemText primary={"Username"} />
-                </ListItem>
+                <MenuItem icon={<LockOpenIcon sx={{color: 'green' }}/>} text="Reauthenticate" to="/login" />
               </List>
               <Divider />
               <List>
